@@ -18,6 +18,7 @@
 		1A66564025F3650E0077DA19 /* Dynamic Programming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A66563F25F3650E0077DA19 /* Dynamic Programming.swift */; };
 		1A66564225F3F0910077DA19 /* DFSBFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A66564125F3F0910077DA19 /* DFSBFS.swift */; };
 		1A66564425F4981D0077DA19 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A66564325F4981D0077DA19 /* Hash.swift */; };
+		1A66564625F4A8000077DA19 /* Level2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A66564525F4A8000077DA19 /* Level2.swift */; };
 		1ADA187D24FF0A4C00A284EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA187C24FF0A4C00A284EB /* AppDelegate.swift */; };
 		1ADA187F24FF0A4C00A284EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA187E24FF0A4C00A284EB /* SceneDelegate.swift */; };
 		1ADA188124FF0A4C00A284EB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA188024FF0A4C00A284EB /* ContentView.swift */; };
@@ -49,6 +50,7 @@
 		1A66563F25F3650E0077DA19 /* Dynamic Programming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dynamic Programming.swift"; sourceTree = "<group>"; };
 		1A66564125F3F0910077DA19 /* DFSBFS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFSBFS.swift; sourceTree = "<group>"; };
 		1A66564325F4981D0077DA19 /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
+		1A66564525F4A8000077DA19 /* Level2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level2.swift; sourceTree = "<group>"; };
 		1ADA187924FF0A4C00A284EB /* AlgorithmPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlgorithmPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ADA187C24FF0A4C00A284EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1ADA187E24FF0A4C00A284EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				1A66563F25F3650E0077DA19 /* Dynamic Programming.swift */,
 				1A66564125F3F0910077DA19 /* DFSBFS.swift */,
 				1A66564325F4981D0077DA19 /* Hash.swift */,
+				1A66564525F4A8000077DA19 /* Level2.swift */,
 			);
 			path = Programmers;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 				1A66564425F4981D0077DA19 /* Hash.swift in Sources */,
 				1A384713250C6FE500AFE2E4 /* Kakao2021Blind.swift in Sources */,
 				1A38470D2508A3AB00AFE2E4 /* Kakao2019BLIND.swift in Sources */,
+				1A66564625F4A8000077DA19 /* Level2.swift in Sources */,
 				1A384711250C6FD400AFE2E4 /* Kakao2019Intern.swift in Sources */,
 				1A66563E25F108580077DA19 /* BinarySearch.swift in Sources */,
 				1ADA189424FF0A4F00A284EB /* AlgorithmPracticeTests.swift in Sources */,
