@@ -48,4 +48,36 @@ extension AlgorithmPracticeTests {
         
         print(solution("CBD"    , ["BACDE", "CBADF", "AECB", "BDA"]    ))
     }
+    
+    func testTriSnail() {
+        func solution(_ n:Int) -> [Int] {
+            var arr: [[Int]] = Array(repeating: [Int](repeating: 0, count: n), count: n)
+            let tail = n*(n+1)/2
+            var state = 0
+            var curr = (r: 0,c: 0)
+            arr[0][0] = 1
+            if n == 1 { return [1]}
+            
+            func fetchNext() -> (Int, Int) {
+                let d = [[1,0], [0,1], [-1,-1]]
+                for _ in 0..<d.count {
+                    let next = (r: curr.r + d[state][0], c: curr.c + d[state][1])
+                    if next.r < n && next.c < n, arr[next.r][next.c] == 0 { return next }
+                    state = (state+1) % d.count
+                }
+                return (0,0)
+            }
+            
+            (2...tail).forEach {
+                curr = fetchNext()
+                arr[curr.r][curr.c] = $0
+            }
+            
+            return arr.flatMap { $0.filter { $0 != 0 } }
+        }
+        (1...22).forEach {
+            print(solution($0))
+        }
+        
+    }
 }
