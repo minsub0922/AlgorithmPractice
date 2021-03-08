@@ -26,4 +26,26 @@ extension AlgorithmPracticeTests {
         
         print(solution(8, 12))
     }
+    
+    func testSkillTree() {
+        func solution(_ skill:String, _ skill_trees:[String]) -> Int {
+            
+//            var dic: [String: Int] = [:]
+//            for (i,s) in skill.enumerated() {
+//                dic[String(s)] = i
+//            }
+//
+//            return skill_trees
+//                .map { $0.map { String($0) } }
+//                .map { $0.filter { dic[$0, default: -1] != -1 } }
+//                .filter { $0.enumerated().filter { dic[$0.element] != $0.offset }.count == 0 }
+//                .count
+            
+            return skill_trees
+                .filter { skill.starts(with: $0.filter { skill.contains($0) })  }
+                .count
+        }
+        
+        print(solution("CBD"    , ["BACDE", "CBADF", "AECB", "BDA"]    ))
+    }
 }
