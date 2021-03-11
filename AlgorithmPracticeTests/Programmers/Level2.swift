@@ -80,4 +80,111 @@ extension AlgorithmPracticeTests {
         }
         
     }
+    
+    func testStringCompressiong() {
+        func solution(_ s:String) -> Int {
+            var ans = s
+            
+            if s.count == 1 { return 1}
+            
+            for i in (1...s.count/2) {
+                var pre = ""
+                var cnt = 0
+                var res = ""
+                var _s = s
+                while _s.count >= i {
+                    if pre == _s.prefix(i) {
+                        cnt += 1
+                    } else {
+                        res += (cnt <= 1 ? "" : "\(cnt)") + pre
+                        pre = String(_s.prefix(i))
+                        cnt = 1
+                    }
+                    _s = String(_s.dropFirst(i))
+                }
+                
+                res += (cnt==1 ? "" : "\(cnt)") + pre + _s
+                ans = ans.count < res.count ? ans : res
+            }
+
+            return ans.count
+        }
+        
+        print(solution("a"))
+    }
+    
+    func testSearchRanking() {
+        func solution(_ info:[String], _ query:[String]) -> [Int] {
+            
+            var scores: [String:[Int]] = [:]
+            let jocker = "-"
+            var ans: [Int] = []
+            
+            for inf in info.map { $0.split(separator: " ") } {
+                var pre: [String] = [""]
+                for (i,e) in inf.enumerated() {
+                    var temp: [String] = []
+                    for p in pre {
+                        if i == inf.count-1, let score = Int(e) {
+                            scores[p, default: []].append(score)
+                            continue
+                        }
+                        
+                        let a = (p + " " + String(e)).trimmingCharacters(in: .whitespacesAndNewlines)
+                        let b = (p + " " + jocker).trimmingCharacters(in: .whitespacesAndNewlines)
+                        temp.append(a)
+                        temp.append(b)
+                    }
+                    pre = temp
+                }
+            }
+            
+            let _query = query
+                .map { $0.replacingOccurrences(of: "and", with: "").replacingOccurrences(of: "  ", with: " ") }
+                .map { $0.split(separator: " ") }
+            
+            for _q in _query {
+                guard let last = _q.last else { return [] }
+                let minScore = String(last)
+                let q = _q.dropLast().reduce("") { $0 + " " + $1 }.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                if minScore == jocker {
+                    ans.append(scores[q, default: []].count)
+                } else {
+                    ans.append(scores[q, default: []].filter { $0 >= Int(minScore)! }.count)
+                }
+            }
+            
+            return ans
+        }
+        
+        print(solution(["java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50"], ["java and backend and junior and pizza 100","python and frontend and senior and chicken 200","cpp and - and senior and pizza 250","- and backend and senior and - 150","- and - and - and chicken 100","- and - and - and - 150"]))
+    }
+    
+    func testQuadCompression() {
+        func solution(_ arr:[[Int]]) -> [Int] {
+            var ans = [0,0]
+            func fetchCompression(_ arr: [[Int]]) {
+                switch arr.flatMap{ $0 }.filter { $0 == 1 }.count {
+                case 0:
+                    ans[0] += 1
+                case Int(pow(Double(arr.count),Double(2))):
+                    ans[1] += 1
+                default:
+                    let n = arr.count
+                    fetchCompression((0..<n/2).map { Array(arr[$0][0..<n/2]) })
+                    fetchCompression((0..<n/2).map { Array(arr[$0][n/2..<n]) })
+                    fetchCompression((n/2..<n).map { Array(arr[$0][0..<n/2]) })
+                    fetchCompression((n/2..<n).map { Array(arr[$0][n/2..<n]) })
+                }
+                
+            }
+            
+            fetchCompression(arr)
+            
+            return ans
+        }
+        
+        print(solution([[1,1,1,1,1,1,1,1],[0,1,1,1,1,1,1,1],[0,0,0,0,1,1,1,1],[0,1,0,0,1,1,1,1],[0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1],[0,0,0,0,1,0,0,1],[0,0,0,0,1,1,1,1]]    ))
+    }
 }
