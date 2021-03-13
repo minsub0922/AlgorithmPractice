@@ -207,4 +207,20 @@ extension AlgorithmPracticeTests {
         
         print(solution([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]]    ))
     }
+    
+    func testAppropriateClosure() {
+        func solution(_ s:String) -> Bool
+        {
+            var cnt = 0
+            
+            for _s in s {
+                cnt += _s == "(" ? 1 : -1
+                if cnt < 0 { return false }
+            }
+            
+            return cnt == 0
+        }
+        
+        print(solution("(())()"))
+    }
 }
