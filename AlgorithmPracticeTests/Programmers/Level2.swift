@@ -223,4 +223,20 @@ extension AlgorithmPracticeTests {
         
         print(solution("(())()"))
     }
+    
+    func testNextBiggerNumber() {
+        func solution(_ n:Int) -> Int
+        {
+            var n = n
+            let target = String(n, radix:2).map { $0 }.filter { $0 == "1" }.count
+            while true {
+                n += 1
+                if target == String(n, radix:2).map { $0 }.filter { $0 == "1" }.count { return n }
+            }
+            
+            return 0
+        }
+        
+        print(solution(1000000))
+    }
 }
