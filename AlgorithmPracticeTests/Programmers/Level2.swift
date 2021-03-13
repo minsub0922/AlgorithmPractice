@@ -116,45 +116,59 @@ extension AlgorithmPracticeTests {
     func testSearchRanking() {
         func solution(_ info:[String], _ query:[String]) -> [Int] {
             
-            var scores: [String:[Int]] = [:]
+            var db: [String:[Int]] = [:]
             let jocker = "-"
             var ans: [Int] = []
             
-            for inf in info.map { $0.split(separator: " ") } {
-                var pre: [String] = [""]
-                for (i,e) in inf.enumerated() {
-                    var temp: [String] = []
-                    for p in pre {
-                        if i == inf.count-1, let score = Int(e) {
-                            scores[p, default: []].append(score)
-                            continue
+            for i in info {
+                let arr = i.components(separatedBy: " ")
+                let language = [arr[0], jocker]
+                let job = [arr[1], jocker]
+                let career = [arr[2], jocker]
+                let food = [arr[3], jocker]
+                let score = Int(arr[4])!
+                
+                for l in language {
+                    for j in job {
+                        for c in career {
+                            for f in food {
+                                let key = "\(l)\(j)\(c)\(f)"
+                                db[key, default: []].append(score)
+                            }
                         }
-                        
-                        let a = (p + " " + String(e)).trimmingCharacters(in: .whitespacesAndNewlines)
-                        let b = (p + " " + jocker).trimmingCharacters(in: .whitespacesAndNewlines)
-                        temp.append(a)
-                        temp.append(b)
                     }
-                    pre = temp
                 }
             }
             
-            let _query = query
-                .map { $0.replacingOccurrences(of: "and", with: "").replacingOccurrences(of: "  ", with: " ") }
-                .map { $0.split(separator: " ") }
+            //ready for binary search
+            db = db.mapValues { $0.sorted() }
             
-            for _q in _query {
-                guard let last = _q.last else { return [] }
-                let minScore = String(last)
-                let q = _q.dropLast().reduce("") { $0 + " " + $1 }.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                if minScore == jocker {
-                    ans.append(scores[q, default: []].count)
-                } else {
-                    ans.append(scores[q, default: []].filter { $0 >= Int(minScore)! }.count)
+            for q in query {
+                var arr = q.components(separatedBy: " ").filter { $0 != "and" }
+                guard
+                    let last = arr.popLast(),
+                    let score = Int(last)
+                    else { continue }
+                let key = arr.reduce("",+)
+                guard
+                    let scores = db[key]
+                    else {
+                        ans.append(0)
+                        continue }
+                                
+                var l = 0, r = scores.count-1
+                var mid = 0
+                while l <= r {
+                    mid = (l+r)/2
+                    if scores[mid] < score {
+                        l = mid+1
+                    } else {
+                        r = mid-1
+                    }
                 }
+                ans.append(scores.count - l)
             }
-            
+        
             return ans
         }
         
