@@ -177,7 +177,6 @@ extension AlgorithmPracticeTests {
                     fetchCompression((n/2..<n).map { Array(arr[$0][0..<n/2]) })
                     fetchCompression((n/2..<n).map { Array(arr[$0][n/2..<n]) })
                 }
-                
             }
             
             fetchCompression(arr)
@@ -186,5 +185,26 @@ extension AlgorithmPracticeTests {
         }
         
         print(solution([[1,1,1,1,1,1,1,1],[0,1,1,1,1,1,1,1],[0,0,0,0,1,1,1,1],[0,1,0,0,1,1,1,1],[0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1],[0,0,0,0,1,0,0,1],[0,0,0,0,1,1,1,1]]    ))
+    }
+    
+    func testBiggestRectangle() {
+        func solution(_ board:[[Int]]) -> Int
+        {
+            var answer:Int = 0
+            
+            var dp: [[Int]] = Array(arrayLiteral: [Int](repeating: 0, count: board[0].count+1)) + board.map { [0] + $0 }
+            
+            for i in 1..<dp.count {
+                for j in 1..<dp[0].count {
+                    if dp[i][j] != 1 { continue }
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+                    answer = max(dp[i][j], answer)
+                }
+            }
+
+            return answer*answer
+        }
+        
+        print(solution([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]]    ))
     }
 }
