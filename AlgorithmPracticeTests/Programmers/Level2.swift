@@ -222,6 +222,7 @@ extension AlgorithmPracticeTests {
         print(solution([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]]    ))
     }
     
+    /**/
     func testAppropriateClosure() {
         func solution(_ s:String) -> Bool
         {
@@ -253,4 +254,71 @@ extension AlgorithmPracticeTests {
         
         print(solution(1000000))
     }
+    
+    // **
+    func testGetMyRegion() {
+        func solution(_ land:[[Int]]) -> Int{
+            var dp: [[Int]] = land
+            
+            for i in 0..<dp.count-1 {
+//                (0..<4).forEach { j in
+//                    dp[i+1][j] += (1...3).map { (j+$0)%4 }.max()
+//                }
+                dp[i+1][0] += max(dp[i][1], dp[i][2], dp[i][3])
+                dp[i+1][1] += max(dp[i][0], dp[i][2], dp[i][3])
+                dp[i+1][2] += max(dp[i][0], dp[i][1], dp[i][3])
+                dp[i+1][3] += max(dp[i][0], dp[i][1], dp[i][2])
+            }
+            
+            return dp.last?.max() ?? 0
+        }
+        
+        print(solution([[1,2,3,5],[5,6,7,8],[4,3,2,1]]))
+    }
+    
+    func testVisitedLength() {
+        func solution(_ dirs:String) -> Int {
+            var v: [String: Bool] = [:]
+            var state = (0,0)
+            var cnt = 0
+            
+            func format(_ a: (Int, Int), _ b: (Int, Int)) -> (String, String) {
+                return ("\(a)->\(b)","\(b)->\(a)")
+            }
+            
+            for d in dirs {
+                var nextState = state
+                switch d {
+                case "U":
+                    nextState = (state.0, state.1+1)
+                case "L":
+                    nextState = (state.0-1, state.1)
+                case "R":
+                    nextState = (state.0+1, state.1)
+                case "D":
+                    nextState = (state.0, state.1-1)
+                default:
+                    continue
+                }
+                
+                if nextState.0 < -5 || nextState.0 > 5 || nextState.1 < -5 || nextState.1 > 5 {
+                    continue
+                }
+                
+                
+                let path = format(state, nextState)
+                state = nextState
+                
+                cnt += (v[path.0, default: false] || v[path.1, default: false]) ? 0 : 1
+                v[path.0] = true
+                v[path.1] = true
+            }
+            
+            return cnt
+        }
+        
+        print(solution("ULURRDLLU"))
+    }
+    
+    
 }
