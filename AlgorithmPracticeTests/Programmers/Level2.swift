@@ -320,5 +320,43 @@ extension AlgorithmPracticeTests {
         print(solution("ULURRDLLU"))
     }
     
+    func testRecursiveBinary() {
+        func solution(_ s:String) -> [Int] {
+            var s = s
+            var cnt = 0, zeros = 0
+            while s.count > 1 {
+                let len = s.count
+                s = s.replacingOccurrences(of: "0", with: "")
+                zeros += len - s.count
+                s = String(s.count, radix: 2)
+                cnt += 1
+            }
+            
+            return [cnt, zeros]
+        }
+        
+        print(solution("110010101001"))
+    }
     
+    func testMaxMin() {
+        func solution(_ s:String) -> String {
+            do {
+                let components = s.components(separatedBy: " ").map { Int($0)! }
+                return "\(components.min()!) \(components.max()!)"
+            } catch {
+                return ""
+            }
+        }
+        
+        print(solution("-1 -2 -3 -4"    ))
+    }
+    
+    func testMinValue() {
+        func solution(_ A:[Int], _ B:[Int]) -> Int
+        {
+            return zip(A.sorted(), B.sorted().reversed()).reduce(0) { $0 + $1.0 * $1.1 }
+        }
+        
+        print(solution([1,4,2], [5,4,4]))
+    }
 }
