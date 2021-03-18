@@ -359,4 +359,70 @@ extension AlgorithmPracticeTests {
         
         print(solution([1,4,2], [5,4,4]))
     }
+    
+    func testFibonachi() {
+        func solution(_ n:Int) -> Int {
+            let mod = 1234567
+            var f: [Int] = [Int](repeating: 0, count: n+1)
+            f[0] = 0
+            f[1] = 1
+            
+            (2...n).forEach {
+                f[$0] = (f[$0-2] % mod + f[$0-1] % mod) % mod
+            }
+            
+            return f[n]
+        }
+        
+        print(solution(99999))
+    }
+    
+    func testMultiplyIndex() {
+        func solution(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
+            
+            var ans: [[Int]] = [[Int]](repeating: [Int](repeating: 0, count: arr2[0].count), count: arr1.count)
+            
+            for i in 0..<arr1.count {
+                for k in 0..<arr2[0].count {
+                    var sum = 0
+                    for j in 0..<arr1[i].count {
+                        sum += arr1[i][j] * arr2[j][k]
+                    }
+                    ans[i][k] = sum
+                }
+            }
+            
+            return ans
+        }
+        
+        print(solution([[1, 4], [3, 2], [4, 1]]    , [[3, 3], [3, 3]]    ))
+    }
+    
+    func testDelivery() {
+        func solution(_ N:Int, _ road:[[Int]], _ k:Int) -> Int {
+            var dic: [Int: [(node: Int, weight: Int)]] = [:]
+            var weights: [Int] = [Int](repeating: 0, count: N+1)
+            
+            road.forEach {
+                dic[$0[0], default: []].append(($0[1], $0[2]))
+                dic[$0[1], default: []].append(($0[0], $0[2]))
+            }
+                    
+            var q: [Int] = [1]
+            weights[1] = 0
+        
+            while !q.isEmpty {
+                let node = q.removeFirst()
+                for n in dic[node, default: []] {
+                    let weight = weights[node] + n.weight
+                    if weight > k || ( weights[n.node] > 0 && weights[n.node] <= weight ) { continue }
+                    weights[n.node] = weight
+                    q.append(n.node)
+                }
+            }
+            return weights.filter { $0 != 0 && $0 <= k }.count
+        }
+        
+        print(solution(5, [[1,2,1],[2,3,3],[5,2,2],[1,4,2],[5,3,1],[5,4,2]], 3))
+    }
 }
