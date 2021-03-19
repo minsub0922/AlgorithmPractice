@@ -425,4 +425,211 @@ extension AlgorithmPracticeTests {
         
         print(solution(5, [[1,2,1],[2,3,3],[5,2,2],[1,4,2],[5,3,1],[5,4,2]], 3))
     }
+    
+    func testJumpTeleport() {
+        func solution(_ n:Int) -> Int
+        {
+            var ans:Int = 0
+            var n :Int = n
+            
+            
+            while n > 0 {
+                ans += n % 2
+                n = n/2
+            }
+
+            return ans
+        }
+        
+        print(solution(5000))
+    }
+    
+    func testEnglishEndGame() {
+        func solution(_ n:Int, _ words:[String]) -> [Int] {
+            var words = words
+            var dic: [String:Bool] = [:]
+            var pre = words[0]
+            
+            for (i,word) in words.enumerated() {
+                if dic[word, default: false] || !word.hasPrefix(pre) { return [i%n + 1, i/n + 1] }
+                dic[word] = true
+                pre = String(word.suffix(1))
+            }
+            
+            return [0,0]
+        }
+        
+        print(solution(2, ["hello", "one", "even", "never", "now", "world", "draw"]))
+    }
+    
+
+    
+    func testNewsClustering() {
+        func solution(_ str1:String, _ str2:String) -> Int {
+            var arr1: [String] = [], arr2: [String] = []
+            let str1 = str1.map { String($0).uppercased() }
+            let str2 = str2.map { String($0).uppercased() }
+            
+            for i in 0..<str1.count-1 {
+                let word = str1[i]+str1[i+1]
+                arr1 += word.getArrayAfterRegex(regex: "[A-Z]+")
+            }
+            
+            for i in 0..<str2.count-1 {
+                let word = str2[i]+str2[i+1]
+                arr2 += word.getArrayAfterRegex(regex: "[A-Z]+")
+            }
+                        
+            let set1: Set = Set(arr1)
+            let set2: Set = Set(arr2)
+            let intersection = Double(set1.intersection(set2).count)
+            let union = Double(set1.union(set2).count)
+            
+            print(set1)
+            print(set2)
+            
+            if intersection == 0 && union == 0 { return 1 }
+            
+            print("intersections : \(intersection), union : \(union)")
+            
+            return Int(intersection / union * 65536)
+        }
+        print(solution("aa1+aa2", "AAAA12"))
+    }
+    
+    func testFriendsFourBlocks() {
+        func solution(_ m:Int, _ n:Int, _ board:[String]) -> Int {
+            var blocks: [[String]] = [[String]](repeating: [], count: n)
+            var board = board.map { $0.map { String($0) } }
+            var ans = 0
+            // pop the stacks
+            
+            func check(r: Int, c: Int, type: String) -> Bool {
+                r < m-1 &&
+                    c < n-1 &&
+                    board[r][c+1] == type &&
+                    board[r+1][c] == type &&
+                    board[r+1][c+1] == type
+            }
+            
+            func fetchTargets(r: Int, c: Int) -> [(Int,Int)] {
+                [(r,c), (r,c+1), (r+1,c), (r+1,c+1)]
+            }
+            
+            
+            while true {
+                var targets: [(Int,Int)] = []
+                
+                // find blocks to be removed
+                for i in 0..<m {
+                    for j in 0..<n {
+                        let type = board[i][j]
+                        if type.isEmpty { continue }
+                        if check(r: i, c: j, type: type) {
+                            targets.append(contentsOf: fetchTargets(r: i, c: j))
+                        }
+                    }
+                }
+                
+                if targets.isEmpty { break }
+                
+                for target in targets {
+                    if !board[target.0][target.1].isEmpty {
+                        board[target.0][target.1] = ""
+                        ans += 1
+                    }
+                }
+                
+            }
+            
+            return ans
+        }
+        
+        print(solution(4, 5, ["CCBDE", "AAADE", "AAABF", "CCBBF"]    ))
+    }
+    
+    func testCache() {
+        func solution(_ cacheSize:Int, _ cities:[String]) -> Int {
+            
+            var deque: [String] = []
+            var ans = 0
+            
+            if cacheSize == 0 { return cities.count * 5 }
+            
+            for city in cities.map { $0.uppercased() } {
+                //hit
+                if deque.contains(city) {
+                    deque.removeAll { $0 == city }
+                    deque.append(city)
+                    ans += 1
+                }
+                //miss
+                else {
+                    if deque.count == cacheSize { deque.removeFirst() }
+                    deque.append(city)
+                    ans += 5
+                }
+            }
+            
+            return ans
+        }
+        
+        print(solution(0, ["Jeju", "Pangyo", "Seoul", "NewYork", "LA"]     ))
+    }
+    
+    func testCandidateKey() {
+        func solution(_ relation:[[String]]) -> Int {
+            func fetchCombinations() -> [[Int]] {
+                let n: Int = relation[0].count
+                var elements: [Int] = [Int](0..<n)
+                var combies: Set<[Int]> = []
+                var visited: [Int:Bool] = [:]
+                
+                func dfs(d: Int, arr: [Int]) {
+                    combies.insert(arr)
+                    
+                    if d == elements.count { return }
+                    
+                    for e in elements {
+                        if visited[e, default: false] { continue }
+                        
+                        visited[e] = true
+                        dfs(d: d+1, arr: arr+[e])
+                        visited[e] = false
+                    }
+                }
+                
+                while !elements.isEmpty {
+                    let element = elements.removeFirst()
+                    dfs(d: 0, arr: [element])
+                }
+                
+                
+                return combies.sorted { $0.count < $1.count }
+            }
+            
+            var ans: [[Int]] = []
+            var combinations = fetchCombinations()
+            
+            while !combinations.isEmpty {
+                let combi = combinations.removeFirst()
+                var relationFiltered: Set<[String]> = []
+                
+                for tuple in relation {
+                    let tupleFiltered = tuple.enumerated().filter { combi.contains($0.offset) }.map { $0.element }
+                    relationFiltered.insert(tupleFiltered)
+                }
+               
+                if relationFiltered.count == relation.count {
+                    ans.append(combi)
+                    combinations = combinations.filter { !Set(combi).isSubset(of: Set($0)) }
+                }
+            }
+            
+            return ans.count
+        }
+        
+        print(solution([["100","ryan","music","2"],["200","apeach","math","2"],["300","tube","computer","3"],["400","con","computer","4"],["500","muzi","music","3"],["600","apeach","music","2"]]    ))
+    }
 }
+
