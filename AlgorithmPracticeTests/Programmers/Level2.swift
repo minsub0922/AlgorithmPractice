@@ -600,10 +600,8 @@ extension AlgorithmPracticeTests {
                 }
                 
                 while !elements.isEmpty {
-                    let element = elements.removeFirst()
-                    dfs(d: 0, arr: [element])
+                    dfs(d: 0, arr: [elements.removeFirst()])
                 }
-                
                 
                 return combies.sorted { $0.count < $1.count }
             }
@@ -630,6 +628,55 @@ extension AlgorithmPracticeTests {
         }
         
         print(solution([["100","ryan","music","2"],["200","apeach","math","2"],["300","tube","computer","3"],["400","con","computer","4"],["500","muzi","music","3"],["600","apeach","music","2"]]    ))
+    }
+    
+    func testJustThatSong() {
+        func fetchTimeInterval(s: String, e: String) -> Int {
+            let s = s.components(separatedBy: ":").map { Int($0) }
+            let e = e.components(separatedBy: ":").map { Int($0) }
+            
+            do {
+                let mInterval = e[1]! - s[1]!
+                let hInterval = e[0]! - s[0]!
+                return mInterval + hInterval * 60
+            } catch {
+                return 0
+            }
+        }
+        
+        func fetchMusicInfos(_ info: String) -> [String] {
+            let info = info.components(separatedBy: ",")
+            var m: [String] = []
+            for i in info[3].map { String($0) } {
+                if i == "#" { m[m.count-1] += i }
+                else { m.append(i) }
+            }
+            
+            // info : [start time, end time, name, m]
+            let startTime = info[0]
+            let played = fetchTimeInterval(s: info[0], e: info[1])
+            let name = info[2]
+            let wholeM: String = (0..<played).map { m[$0 % m.count] }.reduce("",+)
+            
+            
+            return [startTime, String(played), name, wholeM]
+        }
+        
+        func solution(_ m:String, _ musicinfos:[String]) -> String {
+            let musicinfosFiltered =
+                musicinfos
+                    .map { fetchMusicInfos($0) }
+                    .filter { $0[3].contains(m) }
+                    .sorted {
+                        if $0[1] == $1[1] { return $0[0] < $1[0] }
+                        return $0[1] > $1[1] }
+                    .map { $0[2] }
+                        
+            return musicinfosFiltered.isEmpty ? "(None)" : musicinfosFiltered[0]
+        }
+      
+        
+        print(solution("ABC"    , ["12:20,13:10,HELLO,ABCABC", "13:00,13:14,WORLD,ABDDEF"]      ))
     }
 }
 
